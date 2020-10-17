@@ -2,9 +2,10 @@ import pprint
 import sys
 import json
 from googleapiclient.discovery import build
+import config
 
 
-my_api_key = "AIzaSyDHVW1JvQ1icKL_YQul2z30YwQUPmcr53k"
+my_api_key = config.my_api_key
 
 def youtube_data(video_id):
     service = build("youtube", "v3", developerKey=my_api_key)
