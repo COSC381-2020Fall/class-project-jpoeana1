@@ -1,6 +1,6 @@
 # class-project-jpoeana1
 
----cse.py---
+---cse.py--- <br>
 Before running the program, you have to go to https://programmablesearchengine.google.com/ 
 You create your account (using your personal email).
 Obtaining your cse_id :
@@ -17,6 +17,7 @@ In terminal "python3 cse.py"
 ---download_youtube_data_batch.sh & video_ids.txt & download_youtube_data.py & create_data_for_indexing.py---
 To run these programs in terminal first run 
 >$ bash download_youtube_data_batch.sh
+
 >$ python3 create_data_for_indexing.py
 
 --- requirements.txt & create_whoosh_index.py & query_on_whoosh.py---
