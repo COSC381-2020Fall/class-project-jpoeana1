@@ -1,6 +1,6 @@
 # class-project-jpoeana1
-## Set up Python verion: 3.7.9
 
+## Set up Python verion: 3.7.9
 1. run: 'python3 -m pip install -r requirements.txt'
 
 ## Retrieves Google Search results
