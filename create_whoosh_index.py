@@ -1,26 +1,33 @@
 import os
 import sys
 import json
+from tqdm import tqdm
 
 from whoosh.index import create_in
 from whoosh.fields import Schema, TEXT, ID
 
-# three fields in our documents:
-# youtube id, video title, and video description
-# Question: what type is video title?
+def createSearchableData(data_file):
+    '''
+    Schema definition: video id, video title, description
+    '''
+    schema = Schema(id=ID(stored=True), title=TEXT(stored=True), description=TEXT(stored=True))
+    if not os.path.exists("indexdir"):
+        os.mkdir("indexdir")
 
-schema = Schema(id=ID(stored=True), title=TEXT(stored=True), description=TEXT(stored=True))
-# create a folder to store the index
-if not os.path.exists("indexdir"):
-    os.mkdir("indexdir")
+    # Creating an index writer to add document as per schema
+    ix = create_in("indexdir", schema)
+    writer = ix.writer()
 
-# create an index writer
-ix = create_in("indexdir", schema)
-writer = ix.writer()
+    with open(data_file) as f:
+        youtube_array = json.load(f)
+        for youtube_item in tqdm(youtube_array):
+            youtube_id = youtube_item['id']
+            youtube_title = youtube_item['title']
+            youtube_description = youtube_item['description']
+            writer.add_document(id=youtube_id, title=youtube_title, description=youtube_description)
 
-with open('data_for_indexing.json') as f:
-    youtube_array = json.load(f)
-    for item in youtube_array:
-        writer.add_document(id=item['id'], title=item['title'], description=item['description'])
-    
-writer.commit()
+    writer.commit()
+
+if __name__ == "__main__":
+    data_file = 'data_for_indexing.json' 
+    createSearchableData(data_file)

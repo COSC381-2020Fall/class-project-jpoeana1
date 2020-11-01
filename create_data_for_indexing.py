@@ -1,3 +1,4 @@
+  
 from pathlib import Path
 import json
 
@@ -6,11 +7,15 @@ results = []
 for path in paths:
     with open(path, 'r') as f:
         data = json.load(f)
-        print('Video ID: ' + f['video_id'])
-        print('Title: ' + f['title'])
-        print('Description: ' + f['desc'])
-        print('')
-        # insert your code here
-
+        video = data['items'][0]
+        video_id = video['id']
+        title = video['snippet']['title']
+        description = video['snippet']['description']
+        results.append({
+            'id': video_id,
+            'title': title,
+            'description': description
+            })
+    
 with open('data_for_indexing.json', 'w') as dump_file:
     json.dump(results, dump_file)

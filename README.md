@@ -20,4 +20,4 @@
 1. run: 'python3 create_whoosh_index.py'
 
 ## Query on Whoosh
-1. run: 'python3 query_on_whoosh.py home 2 1 will output a json-format result'
+1. run: 'python3 query_on_whoosh.py home 2 1' will output a json-format result
