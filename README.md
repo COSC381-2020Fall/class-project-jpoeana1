@@ -21,3 +21,12 @@
 
 ## Query on Whoosh
 1. run: 'python3 query_on_whoosh.py home 2 1' will output a json-format result
+
+## Flask App for Query on Whoosh
+To run locally
+1. run: flask run
+
+To run forever remotely using public IP
+1. run: screen -S flask-server
+2. run: flask run --host 0.0.0.0
+3. Copy your AWS public IP address and paste it into web browser ending with ':5000/query?q=<search_term>&p=<query_page>'
