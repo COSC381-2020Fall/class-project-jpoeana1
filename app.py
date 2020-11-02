@@ -20,7 +20,16 @@ def handle_test():
 def handle_query():
     query_term = request.args.get("q")
     query_page = int(request.args.get("p"))
-    return jsonify({"query_term": query_term, "search_results": query_on_whoosh.query(query_term)})
+    return jsonify({"query_term": query_term, "search_results": query_on_whoosh.query(query_term, current_page=query_page)})
+
+@app.route("/query_view", strict_slashes=False)
+def handle_query_view():
+    query_term = request.args.get("q")
+    query_page = int(request.args.get("p"))
+    query_results = query_on_whoosh.query(query_term, current_page=query_page)
+    search_results = query_results[0]
+    return  render_template("query.html", results = search_results)
+    
 
 
    
