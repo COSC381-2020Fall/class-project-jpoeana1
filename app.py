@@ -21,9 +21,5 @@ def handle_query():
     query_term = request.args.get("q")
     return jsonify({"query_term": query_term, "search_results": query_on_whoosh.query(query_term)})
 
-# @app.route("/query", strict_slashes=False)
-# def handle_query1():
-   # query_term = request.args.get("q")
-   # query_n = int(request.args.get("p"))
-   # return jsonify(query_on_whoosh.query_v2(query_term, query_n))
+
    
