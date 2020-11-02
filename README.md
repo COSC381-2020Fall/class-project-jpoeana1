@@ -29,4 +29,4 @@ To run locally
 To run forever remotely using public IP
 1. run: `screen -S flask-server`
 2. run: `flask run --host 0.0.0.0`
-3. Copy your AWS public IP address and paste it into web browser ending with '`:5000/query?q=<search_term>&p=<query_page>`'
+3. Copy your AWS public IP address and paste it into web browser ending with `:5000/query?q=<search_term>&p=<query_page>`
