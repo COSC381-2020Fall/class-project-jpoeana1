@@ -3,10 +3,12 @@ from whoosh import scoring
 from whoosh.index import open_dir
 import sys
 import json
+from whoosh.lang.porter import stem
 
 ix = open_dir("indexdir")
 
 def query(query_str, items_per_page=10, current_page=1):
+    query_str = stem(query_str)
     with ix.searcher(weighting=scoring.Frequency) as searcher:
         query = QueryParser("description", ix.schema).parse(query_str)
         results = searcher.search(query, limit=None)

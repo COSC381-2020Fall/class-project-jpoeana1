@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 import query_on_whoosh
 import smtplib
 import config
 import math
+import sqlite3
+
+
 
 # turn this file (app.py) into a web app
 app = Flask(__name__)
@@ -35,13 +38,22 @@ def handle_query_view():
     if not query_page_arg:
         query_page_arg = "1"
 
+    conn = sqlite3.connect('history.db')
+    c = conn.cursor()
+    # INSERT INTO search_terms (id, term, search_time) VALUES (1, 'baby', strftime('%s', 'now')); 
+    # delete from search_terms (id, term, search_time) values (1, 'garbage', strftime('%s', 'now'));
+    c.executescript(f"INSERT INTO search_terms (id, term, search_time) VALUES (1, '{query_term}', strftime('%s', 'now'))");
+    c.execute("INSERT INTO search_terms (id, term, search_time) VALUES (?, ?, strftime('%s', 'now'));", (1, query_term))
+    c.execute("SELECT * FROM search_terms;")
+    rows = c.fetchall()
+    conn.commit()
+    conn.close()
+
     query_page = int(query_page_arg)
-    query_results = query_on_whoosh.query(query_term, current_page=query_page)
-    search_results = query_results[0] # returns a pages of the search results
-    results_cnt = int(query_results[1]) #returns a total number of the search results
-    page_cnt = math.ceil( results_cnt / 10 )
-    return  render_template("query.html", results = search_results, page_cnt=page_cnt, query_term=query_term)
-    
+    search_results = query_on_whoosh.query(query_term, current_page=query_page)
+    return  render_template("query.html", data=search_results[0], query_term=query_term, page_cnt=math.ceil(search_results[1]/10), current_page=query_page, history_list=rows)
+
+
 @app.route("/about", strict_slashes=False)
 def handle_about():
     return render_template("about.html")
@@ -51,7 +63,8 @@ def handle_about():
 def handle_request():
     new_data = request.args.get("new_data")
     server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.startls()
+    server.starttls()
     server.login("jpoeana1@emich.edu", config.gmail_password)
-    server.sendmail("jpoeana1@emich.edu", "jessicapoeana@gmail.com", "request " + new_data)
+    message = "Subject: {}\n\n{}".format("Request to add new data", "request to add: " + new_data)
+    server.sendmail("jpoeana1@emich.edu", "jpoeana1@emich.edu", "request " + new_data)
     return render_template("success.html", new_data=new_data)
