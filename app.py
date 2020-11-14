@@ -40,10 +40,12 @@ def handle_query_view():
 
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
-    # INSERT INTO search_terms (id, term, search_time) VALUES (1, 'baby', strftime('%s', 'now')); 
-    # delete from search_terms (id, term, search_time) values (1, 'garbage', strftime('%s', 'now'));
-    c.executescript(f"INSERT INTO search_terms (id, term, search_time) VALUES (1, '{query_term}', strftime('%s', 'now'))");
-    c.execute("INSERT INTO search_terms (id, term, search_time) VALUES (?, ?, strftime('%s', 'now'));", (1, query_term))
+    
+    # INSERT INTO search_terms (id, term, search_time) VALUES (1, 
+    #'baby', strftime('%s', 'now')); delete from search_terms (id, term, search_time) values (1, 'garbage
+    #', strftime('%s', 'now'));
+    #c.executescript(f"INSERT INTO search_terms (id, term, search_time) VALUES (1, '{query_term}', strftime('%s', 'now'));");
+    c.execute("INSERT INTO search_terms (term, search_time) VALUES (?, strftime('%s', 'now'));",  (query_term,))
     c.execute("SELECT * FROM search_terms;")
     rows = c.fetchall()
     conn.commit()
@@ -51,7 +53,12 @@ def handle_query_view():
 
     query_page = int(query_page_arg)
     search_results = query_on_whoosh.query(query_term, current_page=query_page)
-    return  render_template("query.html", data=search_results[0], query_term=query_term, page_cnt=math.ceil(search_results[1]/10), current_page=query_page, history_list=rows)
+    return  render_template("query.html", 
+                            results=search_results[0], 
+                            query_term=query_term, 
+                            page_cnt=math.ceil(search_results[1]/10), 
+                            current_page=query_page, 
+                            history_list=rows)
 
 
 @app.route("/about", strict_slashes=False)

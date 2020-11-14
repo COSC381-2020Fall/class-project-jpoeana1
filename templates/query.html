@@ -23,7 +23,7 @@
     {% if item == current_page %}
     <b>
         {% endif %}
-        <a href="query_view?q={{ query_term }}&p={{ item }}">{{ query_page }}</a>
+        <a href="query_view?q={{ query_term }}&p={{ query_page }}">{{ query_page }}</a>
         {% if item == current_page %}
     </b>
     {% endif %}
