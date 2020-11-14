@@ -12,14 +12,28 @@
     <input name="q" type="text">
     <input type="submit" value="search">
 </form>
-<!-- we ned to present search results here -->
+<!-- we need to present search results here -->
 {% for item in results %}
 <p>{{ item.url }}</p>
 <p>{{ item.description | safe }}</p>
 {% endfor %}
 
-{% for query_page in range(1, page_cnt+1) %}
-<a href="query_view?q={{ query_term }}&p={{ query_page }}">{{ query_page }}</a>
-{% endfor %}
+<p>
+    {% for query_page in range(1, page_cnt+1) %}
+    {% if item == current_page %}
+    <b>
+        {% endif %}
+        <a href="query_view?q={{ query_term }}&p={{ item }}">{{ query_page }}</a>
+        {% if item == current_page %}
+    </b>
+    {% endif %}
+    {% endfor %}
+</p>
+
+<ul>
+    {% for history_item in history_list %}
+    <li> {{ history_item[1] }} </li>
+    {% endfor %}
+</ul>
 
 {% endblock %}
